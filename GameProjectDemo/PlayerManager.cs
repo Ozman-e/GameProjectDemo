@@ -3,38 +3,40 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace GameProjectDemo
+    //MicroService
 {
-    class PlayerManager
+    class PlayerManager : IPlayerManager
     {
-        List<Player> players = new List<Player>() { };
+        IUserValidationService _userValidationService;
+
+        public PlayerManager(IUserValidationService userValidationService)
+        {
+            _userValidationService = userValidationService;
+        }
+
         public void Add(Player player)
         {
-            players.Add(player);
-            Console.WriteLine("{0} {1}, oyuncu eklendi.", player.FirstName, " ", player.LastName);
-        }
-
-        public void Update(Player player, int Id)
-        {
-
-        }
-        
-        public void Delete(string NationalId)
-        {
-            foreach (var player in players)
+            if (_userValidationService.Validate(player)==true)
             {
-                if (player.NationalId == NationalId)
-                {
-                    players.Remove(player);
-                    Console.WriteLine("{0} {1}, Oyuncu Silindi", player.FirstName, " ", player.LastName);
-                    //break;
-                     
-                }
-                else
-                {
-                    continue;
-                }
-
+                Console.WriteLine("Kayıt Oldu");
             }
+            
+            else
+            {
+                Console.WriteLine("Doğrulama başarısız.");
+               
+            }
+
+        }
+
+        public void Delete(Player player)
+        {
+            Console.WriteLine("Kayıt Silindi");
+        }
+
+        public void Update(Player player)
+        {
+            Console.WriteLine("Kayıt Güncellendi");
         }
     }
 }
